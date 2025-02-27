@@ -5,7 +5,7 @@ Follow instructions in the repository root for project setup.
 ## Running
 Run the following:
 ```
-uv run --with jupyter jupter lab
+uv run --with jupyter jupyter lab
 ```
 
 That's it!
