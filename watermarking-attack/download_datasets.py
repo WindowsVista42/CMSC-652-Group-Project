@@ -1,0 +1,26 @@
+import kagglehub
+import os
+import shutil
+import glob
+
+XRAY_RAW_PATH = "datasets/ct-scan/raw"
+MRI_RAW_PATH = "datasets/ct-scan/raw"
+CTSCAN_RAW_PATH = "datasets/ct-scan/raw"
+
+def download_dataset(kaggle_path, output_folder):
+    print("Downloading dataset:", kaggle_path)
+
+    path = kagglehub.dataset_download(kaggle_path)
+    print("Dataset downloaded to:", path)
+
+    items = glob.glob(os.path.join(path, "*"))
+    for item in items:
+        shutil.move(item, output_folder)
+
+    print("Moved files to:", output_folder)
+
+
+if __name__ == "__main__":
+    download_dataset("sachinkumar413/cxr-2-classes", XRAY_RAW_PATH)
+    download_dataset("masoudnickparvar/brain-tumor-mri-dataset", MRI_RAW_PATH)
+    download_dataset("plameneduardo/sarscov2-ctscan-dataset", CTSCAN_RAW_PATH)
