@@ -3,9 +3,9 @@ import os
 import shutil
 import glob
 
-XRAY_RAW_PATH = "datasets/ct-scan/raw"
-MRI_RAW_PATH = "datasets/ct-scan/raw"
-CTSCAN_RAW_PATH = "datasets/ct-scan/raw"
+XRAY_RAW_PATH = "datasets/xray/raw"
+MRI_RAW_PATH = "datasets/mri/raw"
+CTSCAN_RAW_PATH = "datasets/ctscan/raw"
 
 # Download dataset from kaggle and move it to the output folder.
 def download_dataset(kaggle_path, output_folder):
