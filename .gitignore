@@ -183,3 +183,5 @@ notebook/templates/*.html
 
 # models
 *.pth
+
+.virtual_documents
