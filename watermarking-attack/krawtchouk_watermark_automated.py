@@ -21,7 +21,7 @@ if __name__ == "__main__":
     for strength in strengths:
         # Run the watermarking script with the specified parameters.
         pipe = subprocess.PIPE if i else None
-        procs.append(subprocess.Popen(["uv", "run", "kraw_watermark_all.py", "0.5", "0.5", str(strength), "./datasets/ctscan/raw"], shell=True, stdout=pipe))
+        procs.append(subprocess.Popen(["uv", "run", "krawtchouk_watermark_all.py", "0.5", "0.5", str(strength), "./datasets/ctscan/raw"], shell=True, stdout=pipe))
         i = False
     
     for proc in procs:
