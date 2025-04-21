@@ -16,6 +16,7 @@ dependencies = [
     "seaborn>=0.13.2",
     "pillow>=11.1.0",
     "mlxtend>=0.23.4",
+    "cryptography>=44.0.2",
 ]
 
 [dependency-groups]
