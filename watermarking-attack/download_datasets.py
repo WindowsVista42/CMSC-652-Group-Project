@@ -3,8 +3,8 @@ import os
 import shutil
 import glob
 
-XRAY_RAW_PATH = "datasets/xray/raw"
-MRI_RAW_PATH = "datasets/mri/raw"
+# XRAY_RAW_PATH = "datasets/xray/raw"
+# MRI_RAW_PATH = "datasets/mri/raw"
 CTSCAN_RAW_PATH = "datasets/ctscan/raw"
 
 # Download dataset from kaggle and move it to the output folder.
@@ -35,8 +35,8 @@ def download_dataset(kaggle_path, output_folder):
 
 
 if __name__ == "__main__":
-    download_dataset("sachinkumar413/cxr-2-classes", XRAY_RAW_PATH)
-    print() # Nicer output.
-    download_dataset("masoudnickparvar/brain-tumor-mri-dataset", MRI_RAW_PATH)
-    print() # Nicer output.
+    # download_dataset("sachinkumar413/cxr-2-classes", XRAY_RAW_PATH)
+    # print() # Nicer output.
+    # download_dataset("masoudnickparvar/brain-tumor-mri-dataset", MRI_RAW_PATH)
+    # print() # Nicer output.
     download_dataset("plameneduardo/sarscov2-ctscan-dataset", CTSCAN_RAW_PATH)
