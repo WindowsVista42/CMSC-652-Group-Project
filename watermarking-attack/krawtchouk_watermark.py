@@ -154,7 +154,7 @@ def insertion_KMs(img, b_seq, order, delta, p1, p2, numbits, show_figs):
     # Moments Calculation
     moments, KPols = KMs(img, order, order, p1, p2, 'Direct')
 
-    print("Moments shape:", moments.shape)
+    # print("Moments shape:", moments.shape)
 
     # Moments choice
     mom_all_orig_v = zigzag(moments)
