@@ -171,8 +171,12 @@ class MedicalImageWatermarker:
 
     def _difference_expansion(self, quad: Tuple[int, int, int, int]):
         """Apply difference expansion transform"""
+        # u0, u1, u2, u3 = quad
+        # quad16 = quad.astype(uint16)
         u0, u1, u2, u3 = quad
-        v0 = (u0 + u1 + u2 + u3) // 4
+        # v0 = (u0 + u1 + u2 + u3) // 4
+        v0 = (u0.astype(np.uint16) + u1.astype(np.uint16) + u2.astype(np.uint16) + u3.astype(np.uint16)) // 4
+        print("Quad: ", quad, "v0: ", v0, type(quad), type(u0), type(v0))
         return (v0, u1 - u0, u2 - u0, u3 - u0)
 
     def _inverse_difference_expansion(self, transformed_quad: Tuple[int, int, int, int]):
@@ -183,6 +187,7 @@ class MedicalImageWatermarker:
 
     def _embed_bits(self, transformed_quad: Tuple[int, int, int, int], bits: str):
         """Embed 3 bits into transformed quad"""
+        # print(bits)
         v0, v1, v2, v3 = transformed_quad
         return (
             v0,
@@ -200,7 +205,11 @@ class MedicalImageWatermarker:
         """Main embedding workflow"""
         # Load and validate image
         img = Image.open(image_path).convert("L")
+        # img = Image.open(image_path)
+        print("Image Mode: ", img.mode)
+        # img_data = np.array(img, dtype=np.int16)
         img_data = np.array(img)
+        print("Image Shape: ", img_data.shape, type(img_data))
         
         # Cryptographic operations
         img_bytes = img.tobytes()
@@ -211,10 +220,13 @@ class MedicalImageWatermarker:
         # Prepare payload (content hash + signature + EPR data)
         full_payload = f"{content_hash}||{signature.hex()}||{payload}"
         binary_payload = ''.join(f"{ord(c):08b}" for c in full_payload)
+
+        # print("Full Payload: ", full_payload, "Binary Payload: ", binary_payload)
         
         # Implement ROE-based embedding using difference expansion
         quads = self._form_quads(img_data)
         embedded_quads = []
+        print(len(quads))
         
         for idx, quad in enumerate(quads):
             if self._is_in_roe(idx, img.width, roe_vertices):
