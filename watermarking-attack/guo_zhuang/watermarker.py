@@ -131,12 +131,21 @@ class MedicalImageWatermarker:
             # Ensure we stay within image boundaries
             if row + 1 >= height or col + 1 >= width:
                 continue
+
+            #Get the inverse difference expansion and embed that, not the modified quad itself
+
+            inverse_modified_quad = self._inverse_difference_expansion(modified_quad)
             
             # Update pixel values with modified quad
-            reconstructed[row, col] = modified_quad[0]
-            reconstructed[row, col+1] = modified_quad[1]
-            reconstructed[row+1, col] = modified_quad[2]
-            reconstructed[row+1, col+1] = modified_quad[3]
+            # reconstructed[row, col] = modified_quad[0]
+            # reconstructed[row, col+1] = modified_quad[1]
+            # reconstructed[row+1, col] = modified_quad[2]
+            # reconstructed[row+1, col+1] = modified_quad[3]
+
+            reconstructed[row, col] = inverse_modified_quad[0]
+            reconstructed[row, col+1] = inverse_modified_quad[1]
+            reconstructed[row+1, col] = inverse_modified_quad[2]
+            reconstructed[row+1, col+1] = inverse_modified_quad[3]
         
         return reconstructed
 
@@ -202,9 +211,19 @@ class MedicalImageWatermarker:
             (v3 << 1) | int(bits[2])
         )
 
-    def _get_expandable_quads(self, quad: Tuple[int, int, int, int]):
+    def _get_expandable_quads(self, quads: List[Tuple[int, int, int, int]]):
 
         # TODO: Code to obtain expandable quads as per Eq3 from paper
+
+        expandable_quads = list()
+
+        for quad in quads:
+
+            u0, u1, u2, u3 = quad
+
+            # if (u0 < 126) and (u1 < 126) and (u2 < 126) and (u3 < 126):
+            if (u0 < 127) and (u1 < 127) and (u2 < 127) and (u3 < 127):
+                expandable_quads.append(quad)
 
         return expandable_quads
 
@@ -237,8 +256,12 @@ class MedicalImageWatermarker:
         
         # Implement ROE-based embedding using difference expansion
         quads = self._form_quads(img_data)
+
+        #TODO Expandable quads
+        expandable_quads = self._get_expandable_quads(quads)
+
         embedded_quads = []
-        print(len(quads))
+        print(len(quads), len(expandable_quads))
         
         for idx, quad in enumerate(quads):
             if self._is_in_roe(idx, img.width, roe_vertices):
