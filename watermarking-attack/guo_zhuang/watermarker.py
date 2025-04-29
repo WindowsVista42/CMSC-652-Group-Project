@@ -174,10 +174,16 @@ class MedicalImageWatermarker:
         # u0, u1, u2, u3 = quad
         # quad16 = quad.astype(uint16)
         u0, u1, u2, u3 = quad
-        # v0 = (u0 + u1 + u2 + u3) // 4
-        v0 = (u0.astype(np.uint16) + u1.astype(np.uint16) + u2.astype(np.uint16) + u3.astype(np.uint16)) // 4
-        print("Quad: ", quad, "v0: ", v0, type(quad), type(u0), type(v0))
-        return (v0, u1 - u0, u2 - u0, u3 - u0)
+
+        u0 = u0.astype(np.int64)
+        u1 = u1.astype(np.int64)
+        u2 = u2.astype(np.int64)
+        u3 = u3.astype(np.int64)
+
+        v0 = (u0 + u1 + u2 + u3) // 4
+        # v0 = (u0.astype(np.int64) + u1.astype(np.int64) + u2.astype(np.int64) + u3.astype(np.int64)) // 4
+        # print("Quad: ", quad, "v0: ", v0, type(quad), type(u0), type(v0))
+        return (v0, (u1 - u0), (u2 - u0), (u3 - u0))
 
     def _inverse_difference_expansion(self, transformed_quad: Tuple[int, int, int, int]):
         """Inverse difference expansion transform"""
@@ -195,6 +201,12 @@ class MedicalImageWatermarker:
             (v2 << 1) | int(bits[1]),
             (v3 << 1) | int(bits[2])
         )
+
+    def _get_expandable_quads(self, quad: Tuple[int, int, int, int]):
+
+        # TODO: Code to obtain expandable quads as per Eq3 from paper
+
+        return expandable_quads
 
     def _extract_bits(self, transformed_quad: Tuple[int, int, int, int]):
         """Extract 3 bits from transformed quad"""
@@ -238,6 +250,7 @@ class MedicalImageWatermarker:
                     embedded_quads.append((idx, embedded))
         
         # Reconstruct watermarked image
+        print(len(embedded_quads))
         watermarked = self._reconstruct_image(img_data, embedded_quads)
         return Image.fromarray(watermarked)
 
