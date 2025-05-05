@@ -188,3 +188,4 @@ notebook/templates/*.html
 
 *.zip
 *.csv
+*.png
