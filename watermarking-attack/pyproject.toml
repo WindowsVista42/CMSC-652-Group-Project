@@ -17,6 +17,7 @@ dependencies = [
     "pillow>=11.1.0",
     "mlxtend>=0.23.4",
     "cryptography>=44.0.2",
+    "scikit-image>=0.25.2",
 ]
 
 [dependency-groups]
