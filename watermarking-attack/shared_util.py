@@ -1,12 +1,14 @@
 import math
 import pandas as pd
 import skimage.metrics as skm
-from sklearn.metrics import precision_recall_fscore_support, confusion_matrix
+from sklearn.metrics import precision_recall_fscore_support, confusion_matrix, classification_report
 import torch
 from torch.utils.data import Dataset, DataLoader
 from torchvision.transforms import v2
+from mlxtend.plotting import plot_confusion_matrix
 import numpy as np
 from PIL import Image
+import matplotlib.pyplot as plt
 
 def get_test(device, model, test_loader, criterion):
     """
@@ -186,11 +188,30 @@ class ModelPerformanceReport:
         self.nice_names = nice_names
         self.watermark_images_df = []
         self.df = pd.DataFrame()
+        
+        self.accs = []
+        self.precisions = []
+        self.recalls = []
+        self.f1_scores = []
+        self.true_pos = []
+        self.false_neg = []
+        self.false_pos = []
+        self.true_neg  = []
+        self.cms = []
+        self.ssim_means = []
+        self.ssim_stdevs = []
+        self.psnr_means = []
+        self.psnr_stdevs = []
 
     def evaluate(self, device, model, criterion):     
         print("Calculating image metrics...")
+                
+        def compute_stats(S, m, s):
+            m.append(np.mean(S))
+            s.append(np.std(S))
 
-        for folder in self.watermarked_folders:
+        for i, folder in enumerate(self.watermarked_folders):
+            print(f"Calculating {folder}")
             test_watermarked = list(map(lambda s: f"{folder}{s}", self.test_rel_paths))
             test_path_pairs = list(zip(self.test_raw, test_watermarked))
             
@@ -203,35 +224,16 @@ class ModelPerformanceReport:
             df["psnr"] = list(map(lambda x: eval_psnr(x), test_path_pairs))
         
             self.watermark_images_df.append(df)
-            print(f"Calculated image metrics for {folder}")
-        
-        ssim_means = []
-        ssim_stdevs = []
-        
-        psnr_means = []
-        psnr_stdevs = []
-        
-        def compute_stats(S, m, s):
-            m.append(np.mean(S))
-            s.append(np.std(S))
-        
-        for df in self.watermark_images_df:
-            compute_stats(df["ssim"], ssim_means, ssim_stdevs)
-            compute_stats(df["psnr"], psnr_means, psnr_stdevs)
+            
+            compute_stats(df["ssim"], self.ssim_means, self.ssim_stdevs)
+            compute_stats(df["psnr"], self.psnr_means, self.psnr_stdevs)
+            print("Avg SSIM:", self.ssim_means[i])
+            print("Avg PSNR (dB):", self.psnr_means[i])
         
         print("Finished calculating image metrics.")
         print()
 
         print("Calculating performance metrics...")
-
-        accs = []
-        precisions = []
-        recalls = []
-        f1_scores = []
-        true_pos = []
-        false_neg = []
-        false_pos = []
-        true_neg  = []
         
         for (df, df_name) in zip(self.watermark_images_df, self.df_names):
             print(f"Testing {df_name}")
@@ -241,47 +243,48 @@ class ModelPerformanceReport:
             test_loss, test_accuracy = get_test(device, model, test_loader, criterion)
             print(f'Test Loss: {test_loss:.4f}, Test Accuracy: {test_accuracy*100:.2f}%')
         
-            accs.append(test_accuracy)
+            self.accs.append(test_accuracy)
         
             y_true, y_pred = get_predict(model, test_loader, device)
-            #report = classification_report(y_true, y_pred, target_names= class_names)
-            #print(report)
+            report = classification_report(y_true, y_pred, target_names= class_names)
+            print(report)
         
             precision, recall, f1_score, support = precision_recall_fscore_support(y_true, y_pred, labels=class_names, average='binary')
         
-            precisions.append(precision)
-            recalls.append(recall)
-            f1_scores.append(f1_score)
+            self.precisions.append(precision)
+            self.recalls.append(recall)
+            self.f1_scores.append(f1_score)
         
             cm = confusion_matrix(y_true, y_pred)
-            #plot_confusion_matrix(cm, class_names=class_names, figsize=(8,6))
-            #plt.title(f"Confusion Matrix: {df_name}")
+            plot_confusion_matrix(cm, class_names=class_names, figsize=(8,6))
+            plt.title(f"Confusion Matrix: {df_name}")
             #plt.savefig(f"mobilenetv2_confusion_matrix_{df_name}.png")
-            #plt.show()
+            plt.show()
         
-            true_pos.append(cm[0][0])
-            false_neg.append(cm[0][1])
-            false_pos.append(cm[1][0])
-            true_neg.append(cm[1][1])
+            self.true_pos.append(cm[0][0])
+            self.false_neg.append(cm[0][1])
+            self.false_pos.append(cm[1][0])
+            self.true_neg.append(cm[1][1])
+            self.cms.append(cm)
         
         df = pd.DataFrame()
         df["Name"] = self.nice_names
         df["Strength"] = ("N/A", 50, 100, 200, 300, "N/A")
         df["Position"] = ("N/A", (0.5, 0.5), (0.5, 0.5), (0.5, 0.5), (0.5, 0.5), "N/A")
         df["L-Bits"] = ("N/A", 1024, 1024, 1024, 1024, 1024)
-        df["Mean SSIM"] = ssim_means
-        df["Stdev SSIM"] = ssim_stdevs
-        df["Mean PSNR (dB)"] = psnr_means
-        df["Stdev PSNR (dB)"] = psnr_stdevs
-        df["Accuracy"] = accs
-        df["Precision"] = precisions
-        df["Recall"] = recalls
-        df["F1 Score"] = f1_scores
+        df["Mean SSIM"] = self.ssim_means
+        df["Stdev SSIM"] = self.ssim_stdevs
+        df["Mean PSNR (dB)"] = self.psnr_means
+        df["Stdev PSNR (dB)"] = self.psnr_stdevs
+        df["Accuracy"] = self.accs
+        df["Precision"] = self.precisions
+        df["Recall"] = self.recalls
+        df["F1 Score"] = self.f1_scores
         df["Number of Test Images"] = [len(self.test_rel_paths)] * len(self.watermark_images_df)
-        df["True Positives"] = true_pos
-        df["False Negatives"] = false_neg
-        df["True Negatives"] = true_neg
-        df["False Positives"] = false_pos
+        df["True Positives"] = self.true_pos
+        df["False Negatives"] = self.false_neg
+        df["True Negatives"] = self.true_neg
+        df["False Positives"] = self.false_pos
 
         # Nice output for unaltered
         if df["Mean PSNR (dB)"][0] == math.inf:
