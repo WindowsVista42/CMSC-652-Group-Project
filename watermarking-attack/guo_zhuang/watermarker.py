@@ -237,10 +237,10 @@ class MedicalImageWatermarker:
         # Load and validate image
         img = Image.open(image_path).convert("L")
         # img = Image.open(image_path)
-        print("Image Mode: ", img.mode)
+        # print("Image Mode: ", img.mode)
         # img_data = np.array(img, dtype=np.int16)
         img_data = np.array(img)
-        print("Image Shape: ", img_data.shape, type(img_data))
+        # print("Image Shape: ", img_data.shape, type(img_data))
         
         # Cryptographic operations
         img_bytes = img.tobytes()
@@ -261,7 +261,7 @@ class MedicalImageWatermarker:
         expandable_quads = self._get_expandable_quads(quads)
 
         embedded_quads = []
-        print(len(quads), len(expandable_quads))
+        # print(len(quads), len(expandable_quads))
         
         for idx, quad in enumerate(quads):
             if self._is_in_roe(idx, img.width, roe_vertices):
@@ -273,7 +273,7 @@ class MedicalImageWatermarker:
                     embedded_quads.append((idx, embedded))
         
         # Reconstruct watermarked image
-        print(len(embedded_quads))
+        # print(len(embedded_quads))
         watermarked = self._reconstruct_image(img_data, embedded_quads)
         return Image.fromarray(watermarked)
 
