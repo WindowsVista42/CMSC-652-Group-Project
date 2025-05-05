@@ -185,3 +185,6 @@ notebook/templates/*.html
 *.pth
 
 .virtual_documents
+
+*.zip
+*.csv
