@@ -241,7 +241,6 @@ wheels = [
 ]
 
 [[package]]
-<<<<<<< HEAD
 name = "imageio"
 version = "2.37.0"
 source = { registry = "https://pypi.org/simple" }
@@ -255,8 +254,6 @@ wheels = [
 ]
 
 [[package]]
-=======
->>>>>>> 9610f8ecd268f2c0bb9e7f775426739f2567b602
 name = "ipykernel"
 version = "6.29.5"
 source = { registry = "https://pypi.org/simple" }
@@ -402,7 +399,6 @@ wheels = [
 ]
 
 [[package]]
-<<<<<<< HEAD
 name = "lazy-loader"
 version = "0.4"
 source = { registry = "https://pypi.org/simple" }
@@ -415,8 +411,6 @@ wheels = [
 ]
 
 [[package]]
-=======
->>>>>>> 9610f8ecd268f2c0bb9e7f775426739f2567b602
 name = "markupsafe"
 version = "3.0.2"
 source = { registry = "https://pypi.org/simple" }
@@ -893,7 +887,6 @@ wheels = [
 ]
 
 [[package]]
-<<<<<<< HEAD
 name = "scikit-image"
 version = "0.25.2"
 source = { registry = "https://pypi.org/simple" }
@@ -917,8 +910,6 @@ wheels = [
 ]
 
 [[package]]
-=======
->>>>>>> 9610f8ecd268f2c0bb9e7f775426739f2567b602
 name = "scikit-learn"
 version = "1.6.1"
 source = { registry = "https://pypi.org/simple" }
@@ -1016,7 +1007,6 @@ wheels = [
 ]
 
 [[package]]
-<<<<<<< HEAD
 name = "tifffile"
 version = "2025.3.30"
 source = { registry = "https://pypi.org/simple" }
@@ -1029,8 +1019,6 @@ wheels = [
 ]
 
 [[package]]
-=======
->>>>>>> 9610f8ecd268f2c0bb9e7f775426739f2567b602
 name = "torch"
 version = "2.2.2"
 source = { registry = "https://pypi.org/simple" }
@@ -1198,10 +1186,7 @@ dependencies = [
     { name = "opencv-python" },
     { name = "pandas" },
     { name = "pillow" },
-<<<<<<< HEAD
     { name = "scikit-image" },
-=======
->>>>>>> 9610f8ecd268f2c0bb9e7f775426739f2567b602
     { name = "scikit-learn" },
     { name = "seaborn" },
     { name = "torch", version = "2.2.2", source = { registry = "https://pypi.org/simple" }, marker = "sys_platform != 'linux' and sys_platform != 'win32'" },
@@ -1225,10 +1210,7 @@ requires-dist = [
     { name = "opencv-python", specifier = ">=4.11.0.86" },
     { name = "pandas", specifier = ">=2.2.3" },
     { name = "pillow", specifier = ">=11.1.0" },
-<<<<<<< HEAD
     { name = "scikit-image", specifier = ">=0.25.2" },
-=======
->>>>>>> 9610f8ecd268f2c0bb9e7f775426739f2567b602
     { name = "scikit-learn", specifier = ">=1.6.1" },
     { name = "seaborn", specifier = ">=0.13.2" },
     { name = "torch", marker = "sys_platform != 'linux' and sys_platform != 'win32'", specifier = "==2.2.2" },
