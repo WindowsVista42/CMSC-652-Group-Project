@@ -10,15 +10,9 @@ import krawtchouk_watermark as kw
 
 def watermark_a(path, in_path, bits, order, strength, p1, p2, nbits):
     comps = path.split(os.path.basename(os.path.normpath(in_path)))
-<<<<<<< HEAD
-
-    out_path = os.path.join("", *comps[:-1])
-    out_path = os.path.join(out_path, f"krawtchouk_{p1:.3f}_{p2:.3f}_{strength}")
-=======
     
     out_path = os.path.join("", *comps[:-1])
     out_path = os.path.join(out_path, f"watermark_{p1:.3f}_{p2:.3f}_{strength}")
->>>>>>> 9610f8ecd268f2c0bb9e7f775426739f2567b602
     s = comps[-1].split(os.path.sep)
     out_path = os.path.join(out_path, *s)
 
