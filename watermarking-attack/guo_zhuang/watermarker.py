@@ -245,14 +245,16 @@ class MedicalImageWatermarker:
         # Cryptographic operations
         img_bytes = img.tobytes()
         content_hash = self._compute_hash(img_bytes)
+        print("content_hash len: ", len(content_hash))
         # signature = self._sign_content(content_hash, private_key)
         signature = self._sign_data(content_hash, private_key)
+        print("signature len: ", len(signature), len(signature.hex()))
         
         # Prepare payload (content hash + signature + EPR data)
         full_payload = f"{content_hash}||{signature.hex()}||{payload}"
         binary_payload = ''.join(f"{ord(c):08b}" for c in full_payload)
 
-        # print("Full Payload: ", full_payload, "Binary Payload: ", binary_payload)
+        print("Full Payload: ", full_payload, "Binary Payload: ", binary_payload, "Binary length: ", len(binary_payload))
         
         # Implement ROE-based embedding using difference expansion
         quads = self._form_quads(img_data)
