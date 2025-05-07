@@ -53,10 +53,17 @@ if __name__ == "__main__":
 		v_len = 8
 		y_off = 12
 
+
+		# Ensure x1 is even and y1 is odd to embed 300 bits
 		x1 = width//2 - h_len/2
-		x2 = width//2 + h_len/2
 		y1 = height - y_off
+		x1 = x1 + (x1 % 2)
+		y1 = y1 + ((y1 % 2) - 1)
+
+		x2 = x1 + h_len
 		y2 = y1 + v_len
+
+		# print("Width: ", width, "Height: ", height, "| Co-ordinates: ", x1, y1, x2, y2)
 
 		watermarked_img = watermarker.embed_watermark(imfile[0], private_key,
 			"a", [(x1, y1), (x2, y1), (x2, y2), (x1, y2)])
@@ -82,8 +89,11 @@ if __name__ == "__main__":
 		y_off = 12
 
 		x1 = width//2 - h_len/2
-		x2 = width//2 + h_len/2
 		y1 = height - y_off
+		x1 = x1 + (x1 % 2)
+		y1 = y1 + ((y1 % 2) - 1)
+
+		x2 = x1 + h_len
 		y2 = y1 + v_len
 
 		watermarked_img = watermarker.embed_watermark(imfile[0], private_key,
