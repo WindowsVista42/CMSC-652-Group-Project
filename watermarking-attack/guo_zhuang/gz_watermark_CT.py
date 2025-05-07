@@ -43,8 +43,23 @@ if __name__ == "__main__":
 
 		# watermarked_img = watermarker.embed_watermark(os.path.join(ct_raw_dir, 'COVID/', imfile[0]), private_key,
 		# 	"a", [(10, 10), (20, 10), (20, 20), (10, 20)])
+
+		#Get image attributes, compute ROE vertices
+		img = Image.open(imfile[0]).convert('L')
+
+		height, width = img.height, img.width
+
+		h_len = 40
+		v_len = 8
+		y_off = 12
+
+		x1 = width//2 - h_len/2
+		x2 = width//2 + h_len/2
+		y1 = height - y_off
+		y2 = y1 + v_len
+
 		watermarked_img = watermarker.embed_watermark(imfile[0], private_key,
-			"a", [(10, 10), (20, 10), (20, 20), (10, 20)])
+			"a", [(x1, y1), (x2, y1), (x2, y2), (x1, y2)])
 
 		watermarked_img.save(os.path.join(ct_gz_dir, 'COVID/', imfile[0].split('/')[-1]))
 		i+=1
@@ -57,8 +72,22 @@ if __name__ == "__main__":
 		assert len(imfile) == 1
 		"More than one or zero files found"
 
+		#Get image attributes, compute ROE vertices
+		img = Image.open(imfile[0]).convert('L')
+
+		height, width = img.height, img.width
+
+		h_len = 40
+		v_len = 8
+		y_off = 12
+
+		x1 = width//2 - h_len/2
+		x2 = width//2 + h_len/2
+		y1 = height - y_off
+		y2 = y1 + v_len
+
 		watermarked_img = watermarker.embed_watermark(imfile[0], private_key,
-			"a", [(10, 10), (20, 10), (20, 20), (10, 20)])
+			"a", [(x1, y1), (x2, y1), (x2, y2), (x1, y2)])
 
 		watermarked_img.save(os.path.join(ct_gz_dir, 'non-COVID/', imfile[0].split('/')[-1]))
 		i+=1

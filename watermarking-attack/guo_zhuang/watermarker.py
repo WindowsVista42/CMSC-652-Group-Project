@@ -275,7 +275,7 @@ class MedicalImageWatermarker:
                     embedded_quads.append((idx, embedded))
         
         # Reconstruct watermarked image
-        # print(len(embedded_quads))
+        print("Embedded ", 3*len(embedded_quads), " bits")
         watermarked = self._reconstruct_image(img_data, embedded_quads)
         return Image.fromarray(watermarked)
 
