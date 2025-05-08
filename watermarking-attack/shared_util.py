@@ -157,6 +157,8 @@ watermarked_folders = [
     "datasets/ctscan/krawtchouk_0.500_0.500_100/",
     "datasets/ctscan/krawtchouk_0.500_0.500_200/",
     "datasets/ctscan/krawtchouk_0.500_0.500_300/",
+    "datasets/ctscan/guo_zhuang_75/",
+    "datasets/ctscan/guo_zhuang_300/",
     "datasets/ctscan/roni/",
 ]
 
@@ -166,6 +168,8 @@ df_names = [
     "krawtchouk p1=0.500 p2=0.500 strength=100",
     "krawtchouk p1=0.500 p2=0.500 strength=200",
     "krawtchouk p1=0.500 p2=0.500 strength=300",
+    "guo_zhuang bits=75",
+    "guo_zhuang bits=300",
     "roni",
 ]
 
@@ -175,6 +179,8 @@ nice_names = [
     "Krawtchouk",
     "Krawtchouk",
     "Krawtchouk",
+    "Guo-Zhuang",
+    "Guo-Zhuang",
     "RONI",
 ]
 
@@ -269,9 +275,9 @@ class ModelPerformanceReport:
         
         df = pd.DataFrame()
         df["Name"] = self.nice_names
-        df["Strength"] = ("N/A", 50, 100, 200, 300, "N/A")
-        df["Position"] = ("N/A", (0.5, 0.5), (0.5, 0.5), (0.5, 0.5), (0.5, 0.5), "N/A")
-        df["L-Bits"] = ("N/A", 1024, 1024, 1024, 1024, 1024)
+        df["Strength"] = ("N/A", 50, 100, 200, 300, "N/A", "N/A", "N/A")
+        df["Position"] = ("N/A", (0.5, 0.5), (0.5, 0.5), (0.5, 0.5), (0.5, 0.5), "N/A", "N/A", "N/A")
+        df["L-Bits"] = ("N/A", 1024, 1024, 1024, 1024, 75, 300, 1024)
         df["Mean SSIM"] = self.ssim_means
         df["Stdev SSIM"] = self.ssim_stdevs
         df["Mean PSNR (dB)"] = self.psnr_means
